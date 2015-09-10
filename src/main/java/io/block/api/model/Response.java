@@ -69,4 +69,9 @@ public class Response {
         @SerializedName("data")
         public io.block.api.model.Error error;
     }
+
+    public class ResponseNetworkDescriptor extends Response {
+        @SerializedName("data")
+        public io.block.api.model.NetworkDescriptor network;
+    }
 }

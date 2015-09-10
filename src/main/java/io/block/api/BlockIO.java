@@ -378,6 +378,35 @@ public class BlockIO {
         return (TransactionsSent) abstractTransactionRequest(userIDs, Constants.Params.USER_IDS, beforeTX, Constants.Values.TYPE_SENT);
     }
 
+    /**
+     * Validates the API key and returns a Network
+     * @return A {@link io.block.api.utils.Network} object
+     * @throws BlockIOException
+     */
+    public Network getNetwork() throws BlockIOException {
+        Response.ResponseNetworkDescriptor response = (Response.ResponseNetworkDescriptor) doApiCall(
+                Constants.Methods.VALIDATE_API_KEY,
+                null,
+                Response.ResponseNetworkDescriptor.class
+        );
+        return Network.getNetwork(response.network.network);
+    }
+
+    /**
+     * Validates the API key
+     * @return A boolean indicating whether the
+     * @throws BlockIOException
+     */
+    public boolean validateKey() throws BlockIOException {
+        try {
+            getNetwork();
+        } catch (BlockIOServerException e) {
+            return false;
+        }
+
+        return true;
+    }
+
     private Object abstractTransactionRequest(String[] whatFor, String typeOfParams, String beforeTx, String type) throws BlockIOException {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(Constants.Params.TYPE, type);

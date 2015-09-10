@@ -6,6 +6,8 @@ public class Constants {
     public static final String API_VERSION = "2";
 
     public static class Methods {
+        public static final String VALIDATE_API_KEY = "validate_api_key";
+
         public static final String GET_NEW_ADDRESS = "get_new_address";
         public static final String GET_ACCOUNT_BALANCE = "get_balance";
         public static final String GET_MY_ADDRESSES = "get_my_addresses";
