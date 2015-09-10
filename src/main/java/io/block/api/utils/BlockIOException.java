@@ -1,6 +1,6 @@
 package io.block.api.utils;
 
-public class BlockIOException extends Exception {
+public abstract class BlockIOException extends Exception {
 
     public BlockIOException() {
 

@@ -84,7 +84,7 @@ public class SigningUtils {
         try {
             return cipherData(aes, pass);
         } catch (InvalidCipherTextException e) {
-            throw new BlockIOException("Unexpected error while signing transaction. Please file an issue report.");
+            throw new BlockIOClientException("Unexpected error while signing transaction. Please file an issue report.");
         }
     }
 
@@ -101,7 +101,7 @@ public class SigningUtils {
         try {
             return getPrivKey(fromHex(new String(passphrase, "UTF-8")));
         } catch (UnsupportedEncodingException e) {
-            throw new BlockIOException("Your system does not seem to support UTF-8 encoding! Aborting signing process.");
+            throw new BlockIOClientException("Your system does not seem to support UTF-8 encoding! Aborting signing process.");
         }
     }
 
@@ -119,9 +119,9 @@ public class SigningUtils {
         try {
             return cipherData(aes, plain.getBytes("UTF-8"));
         } catch (InvalidCipherTextException e) {
-            throw new BlockIOException("Unexpected error while signing transaction. Please file an issue report.");
+            throw new BlockIOClientException("Unexpected error while signing transaction. Please file an issue report.");
         } catch (UnsupportedEncodingException e) {
-            throw new BlockIOException("Your system does not seem to support UTF-8 encoding! Aborting signing process.");
+            throw new BlockIOClientException("Your system does not seem to support UTF-8 encoding! Aborting signing process.");
         }
     }
 
@@ -192,7 +192,7 @@ public class SigningUtils {
             seq.close();
             return toHex(bos.toByteArray());
         } catch (IOException e) {
-            throw new BlockIOException("That should never happen... File an issue report.");  // Cannot happen.
+            throw new BlockIOClientException("That should never happen... File an issue report.");  // Cannot happen.
         }
     }
 

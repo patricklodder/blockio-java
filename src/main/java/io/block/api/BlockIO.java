@@ -2,9 +2,7 @@ package io.block.api;
 
 import com.google.gson.Gson;
 import io.block.api.model.*;
-import io.block.api.utils.BlockIOException;
-import io.block.api.utils.Constants;
-import io.block.api.utils.SigningUtils;
+import io.block.api.utils.*;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -184,7 +182,7 @@ public class BlockIO {
                     method = Constants.Methods.WITHDRAW_FROM_USERIDS;
                     break;
                 default:
-                    throw new BlockIOException("You requested a withdrawal from specific sources but did not set the source type.");
+                    throw new BlockIOClientException("You requested a withdrawal from specific sources but did not set the source type.");
             }
         }
 
@@ -194,7 +192,7 @@ public class BlockIO {
         return finalizeWithdrawal(signRequest, secretPin);
     }
 
-    private HashMap<String, String> setupWithdrawalParams(Map<String, Double> addrsAndAmounts, ParamType targetType) throws BlockIOException {
+    private HashMap<String, String> setupWithdrawalParams(Map<String, Double> addrsAndAmounts, ParamType targetType) throws BlockIOClientException {
         String addrsParamString = "";
         String amountsParamString = "";
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // This will force '.' as decimal separator
@@ -220,7 +218,7 @@ public class BlockIO {
                 params.put(Constants.Params.TO_USERIDS, addrsParamString);
                 break;
             default:
-                throw new BlockIOException("You did not set the target type.");
+                throw new BlockIOClientException("You did not set the target type.");
         }
         params.put(Constants.Params.AMOUNTS, amountsParamString);
 
@@ -407,7 +405,7 @@ public class BlockIO {
         }
     }
 
-    private Response doApiCall(String method, Map<String, String> params, Class<?> responseType) throws BlockIOException {
+    private Response doApiCall(String method, Map<String, String> params, Class<?> responseType) throws BlockIOClientException, BlockIOServerException {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet request = new HttpGet(Constants.buildUri(method));
         URIBuilder uriBuilder = new URIBuilder(request.getURI());
@@ -425,9 +423,9 @@ public class BlockIO {
             response = client.execute(request);
             return getResponse(response, responseType);
         } catch (IOException e) {
-            throw new BlockIOException("Network connectivity problem.");
+            throw new BlockIOClientException("Network connectivity problem.", e);
         } catch (URISyntaxException e) {
-            throw new BlockIOException("URI build failed. That is an internal error. Please file an issue.");
+            throw new BlockIOClientException("URI build failed. That is an internal error. Please file an issue.", e);
         }
     }
 
@@ -450,18 +448,18 @@ public class BlockIO {
             response = client.execute(request);
             return getResponse(response, responseType);
         } catch (IOException e) {
-            throw new BlockIOException("Network connectivity problem.");
+            throw new BlockIOClientException("Network connectivity problem.", e);
         }
     }
 
-    private Response getResponse(CloseableHttpResponse response, Class<?> responseType) throws BlockIOException {
+    private Response getResponse(CloseableHttpResponse response, Class<?> responseType) throws BlockIOClientException, BlockIOServerException {
         Gson gson = new Gson();
         String responseString;
         try {
             responseString = EntityUtils.toString(response.getEntity());
             response.close();
         } catch (IOException e) {
-            throw new BlockIOException("Received invalid data from API.");
+            throw new BlockIOClientException("Received invalid data from API.", e);
         }
 
         switch (response.getStatusLine().getStatusCode()) {
@@ -469,9 +467,9 @@ public class BlockIO {
                 return (Response) gson.fromJson(responseString, responseType);
             case HttpStatus.SC_NOT_FOUND:
                 Response.ResponseError error = gson.fromJson(responseString, Response.ResponseError.class);
-                throw new BlockIOException("API returned error: " + error.error.message);
+                throw new BlockIOServerException("API returned error: " + error.error.message);
             default:
-                throw new BlockIOException("Unknown API response.");
+                throw new BlockIOClientException("Unknown API response.");
         }
     }
 }
