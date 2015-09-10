@@ -11,6 +11,7 @@ public class Constants {
         public static final String GET_MY_ADDRESSES = "get_my_addresses";
         public static final String GET_ADDR_BALANCE = "get_address_balance";
         public static final String GET_ADDR_BY_LABEL = "get_address_by_label";
+        public static final String GET_TXNS = "get_transactions";
 
         public static final String WITHDRAW_FROM_ANY = "withdraw";
         public static final String WITHDRAW_FROM_LABELS = "withdraw_from_labels";
@@ -19,10 +20,9 @@ public class Constants {
         public static final String WITHDRAW_DO_FINAL = "sign_and_finalize_withdrawal";
 
         public static final String GET_PRICES = "get_current_price";
+
         public static final String IS_GREEN_ADDR = "is_green_address";
         public static final String IS_GREEN_TX = "is_green_transaction";
-        public static final String GET_TXNS = "get_transactions";
-
     }
 
     public static class Params {
