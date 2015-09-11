@@ -215,7 +215,7 @@ public class WalletClient extends BasicAPIClientImpl implements WalletAPI {
 
     private Withdrawal finalizeWithdrawal(WithdrawSignRequest signRequest, String secretPin) throws BlockIOException {
         // Now lets' do the clientside magic
-        signRequest = SigningUtils.signWithdrawalRequest(signRequest, secretPin);
+        signRequest = WithdrawalUtils.signWithdrawalRequest(signRequest, secretPin);
 
         // And do the actual withdrawal
         HashMap<String, String> params = new HashMap<String, String>(1);
