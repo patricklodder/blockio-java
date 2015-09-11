@@ -138,8 +138,8 @@ public class SigningUtils {
 
     /**
      * Step (8): Get privkey from decrypted passphrase
-     * @param passphrase
-     * @return
+     * @param passphrase The passphrase as byte array
+     * @return A byte array containing the private key
      */
     static byte[] getPrivKey(byte[] passphrase) {
         SHA256Digest digest = new SHA256Digest();
@@ -151,19 +151,15 @@ public class SigningUtils {
 
     /**
      * Step (8) to (11): Derive pubkey from passphrase
-     * @param privBytes
-     * @return
-     * @throws BlockIOException
+     * @param privBytes private key as byte array
+     * @return A byte array containing the public key
      */
-    static byte[] derivePublicKey(byte[] privBytes) throws BlockIOException {
+    static byte[] derivePublicKey(byte[] privBytes) {
         X9ECParameters params = SECNamedCurves.getByName("secp256k1");
         ECDomainParameters ecParams = new ECDomainParameters(params.getCurve(), params.getG(), params.getN(),  params.getH());
         BigInteger priv = new BigInteger(1, privBytes);
-        byte[] pubBytes = ecParams.getG().multiply(priv).getEncoded(true);
-
-        return pubBytes;
+        return ecParams.getG().multiply(priv).getEncoded(true);
     }
-
 
     static String signData(String input, byte[] key) throws BlockIOException {
         ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));

@@ -1,7 +1,5 @@
 package io.block.api.utils;
 
-import sun.nio.ch.Net;
-
 public enum Network {
     BTC,
     LTC,

@@ -2,13 +2,10 @@ package io.block.api.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.block.api.model.Input;
 import io.block.api.model.Response;
-import io.block.api.model.Signer;
 import io.block.api.model.WithdrawSignRequest;
 import junit.framework.TestCase;
 import org.bouncycastle.util.encoders.Base64;
-import org.junit.Ignore;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
