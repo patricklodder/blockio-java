@@ -1,5 +1,8 @@
 package io.block.api;
 
+import io.block.api.client.WalletAPI;
+import io.block.api.com.HttpPostCommunicator;
+import io.block.api.client.WalletClient;
 import io.block.api.model.AccountBalance;
 import io.block.api.model.Price;
 import io.block.api.model.Prices;
@@ -11,9 +14,15 @@ import java.util.Date;
 public class SampleClient {
     public static void main(String [ ] args)
     {
-        BlockIO api = new BlockIO("!!! YOUR API KEY HERE !!!");
+        WalletAPI api = new WalletClient("!!! YOUR API KEY HERE !!!", new HttpPostCommunicator());
+
         try {
             System.out.println();
+
+            if (!api.validateKey()) {
+                System.out.println("Could not validate api key");
+                System.exit(1);
+            }
 
             AccountBalance balance = api.getAccountBalance();
             System.out.println("Balance for account " + balance.network
