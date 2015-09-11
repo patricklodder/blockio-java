@@ -27,7 +27,7 @@ public class SampleClient {
             AccountBalance balance = api.getAccountBalance();
             System.out.println("Balance for account " + balance.network
                     + ": Confirmed: " + balance.availableBalance
-                    + " Pendning: " + balance.pedingReceivedBalance);
+                    + " Pending: " + balance.pendingReceivedBalance);
             System.out.println();
 
             Prices prices = api.getPrices("");

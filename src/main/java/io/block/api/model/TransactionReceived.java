@@ -8,7 +8,7 @@ import java.util.List;
 public class TransactionReceived {
     public String txid;
 
-    @SerializedName("from_greem_address")
+    @SerializedName("from_green_address")
     public boolean fromGreenAddress;
 
     public long time;
